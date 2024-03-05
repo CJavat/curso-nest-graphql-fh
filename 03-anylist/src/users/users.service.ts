@@ -33,11 +33,29 @@ export class UsersService {
     return [];
   }
 
-  findOneByEmail( email: string ): Promise<User> {
+  async findOneByEmail( email: string ): Promise<User> {
     try {
-      return this.usersRepository.findOneByOrFail({ email });
+      return await this.usersRepository.findOneByOrFail({ email });
+      
+
     } catch (error) {
-      this.handleDBErrors( error );
+      this.handleDBErrors({
+        code: 'error-001',
+        detail: `${ email } not found`
+      });
+    }
+  }
+  
+  async findOneById( id: string ): Promise<User> {
+    try {
+      return await this.usersRepository.findOneByOrFail({ id });
+      
+
+    } catch (error) {
+      this.handleDBErrors({
+        code: 'error-002',
+        detail: `${ id } not found`
+      });
     }
   }
 
@@ -51,6 +69,14 @@ export class UsersService {
 
   private handleDBErrors( error: any ): Promise<never> {
     if ( error.code === '23505' ) {
+      throw new BadRequestException( error.detail.replace('Key', '') );
+    }
+
+    if ( error.code === 'error-001' ) {
+      throw new BadRequestException( error.detail.replace('Key', '') );
+    }
+
+    if ( error.code === 'error-002' ) {
       throw new BadRequestException( error.detail.replace('Key', '') );
     }
     
