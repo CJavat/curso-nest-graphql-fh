@@ -18,3 +18,5 @@
 #### Sección 11 - Entidadapara el manejo de listas Maestro Detalle
 #### Sección 12 - Despliegues
 #### Sección 13 - Despedida del curso
+
+TERMINADO EL 20/03/2024
